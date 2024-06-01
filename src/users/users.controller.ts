@@ -9,7 +9,6 @@ export class UsersController {
   @Get('/users')
   async findAllUsers(): Promise<Users[]> {
     const users = await this.userService.findAll();
-    console.log('test', users);
     return users;
   }
 }

@@ -1,4 +1,11 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Contacts } from 'src/contacts/contacts.entity';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Users {
@@ -16,4 +23,10 @@ export class Users {
 
   @Column()
   socketId: string;
+
+  @OneToMany(() => Contacts, (x) => x.contactInfo)
+  @JoinColumn({
+    name: 'id',
+  })
+  userInfo: Contacts[];
 }

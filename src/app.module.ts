@@ -13,12 +13,13 @@ import { Otps } from './otps/otps.entity';
 import { OtpsModule } from './otps/otps.module';
 import { AuthModule } from './auth/auth.module';
 import APP_CREDENTIALS from './app.credentials';
+import { Contacts } from './contacts/contacts.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       ...APP_CREDENTIALS.DB,
-      entities: [Users, Countries, Otps],
+      entities: [Users, Countries, Otps, Contacts],
     }),
     UsersModule,
     SocketModule,
