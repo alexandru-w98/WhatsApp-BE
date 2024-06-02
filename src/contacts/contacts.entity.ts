@@ -1,11 +1,4 @@
-import { Users } from 'src/users/users.entity';
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 @Entity()
 export class Contacts {
@@ -17,10 +10,4 @@ export class Contacts {
 
   @Column()
   contactId: number;
-
-  @ManyToOne(() => Users, (x) => x.userInfo)
-  @JoinColumn({
-    name: 'contactId',
-  })
-  contactInfo: Users;
 }

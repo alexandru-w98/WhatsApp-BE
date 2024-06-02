@@ -13,10 +13,17 @@ export class UsersService {
   findAll(): Promise<Users[]> {
     return this.usersRepository.find({
       relations: {
-        userInfo: {
-          contactInfo: true,
-        },
+        contacts: true,
       },
+    });
+  }
+
+  findById(id) {
+    return this.usersRepository.find({
+      relations: {
+        contacts: true,
+      },
+      where: { id },
     });
   }
 }

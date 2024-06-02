@@ -3,8 +3,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
-  OneToMany,
-  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -24,9 +24,17 @@ export class Users {
   @Column()
   socketId: string;
 
-  @OneToMany(() => Contacts, (x) => x.contactInfo)
-  @JoinColumn({
-    name: 'id',
+  @ManyToMany(() => Users)
+  @JoinTable({
+    name: 'contacts',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'contactId',
+      referencedColumnName: 'id',
+    },
   })
-  userInfo: Contacts[];
+  contacts: Contacts[];
 }
