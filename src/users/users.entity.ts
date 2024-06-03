@@ -1,4 +1,11 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Contacts } from 'src/contacts/contacts.entity';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity()
 export class Users {
@@ -6,7 +13,7 @@ export class Users {
   id: number;
 
   @Column()
-  nickName: string;
+  name: string;
 
   @Column()
   phone: string;
@@ -16,4 +23,18 @@ export class Users {
 
   @Column()
   socketId: string;
+
+  @ManyToMany(() => Users)
+  @JoinTable({
+    name: 'contacts',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'contactId',
+      referencedColumnName: 'id',
+    },
+  })
+  contacts: Contacts[];
 }
