@@ -13,7 +13,7 @@ export class Users {
   id: number;
 
   @Column()
-  nickName: string;
+  name: string;
 
   @Column()
   phone: string;

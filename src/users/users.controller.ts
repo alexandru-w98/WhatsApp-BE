@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './users.entity';
 
@@ -12,10 +12,10 @@ export class UsersController {
     return users;
   }
 
-  @Get('/users/:id')
-  async findUserById(@Param() pathParams) {
-    const { id } = pathParams;
-    const user = await this.userService.findById(id);
-    return user;
+  @Get('/user-profile')
+  async findUserById(@Req() request) {
+    const { authToken } = request.cookies;
+    const profile = await this.userService.getUserProfile(authToken);
+    return profile;
   }
 }
