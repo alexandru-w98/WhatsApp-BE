@@ -14,18 +14,21 @@ import { OtpsModule } from './otps/otps.module';
 import { AuthModule } from './auth/auth.module';
 import APP_CREDENTIALS from './app.credentials';
 import { Contacts } from './contacts/contacts.entity';
+import { Messages } from './messages/messages.entity';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       ...APP_CREDENTIALS.DB,
-      entities: [Users, Countries, Otps, Contacts],
+      entities: [Users, Countries, Otps, Contacts, Messages],
     }),
     UsersModule,
     SocketModule,
     CountriesModule,
     OtpsModule,
     AuthModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
