@@ -49,4 +49,10 @@ export class SocketGateway {
     const { to, from } = data;
     await this.socketService.onMessageRead(from, to);
   }
+
+  @SubscribeMessage('message-delivered-all')
+  async handleMessageDeliveredAll(socket: Socket, data) {
+    const { to } = data;
+    await this.socketService.onMessageDeliveredAll(to);
+  }
 }

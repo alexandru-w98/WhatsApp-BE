@@ -3,10 +3,10 @@
 import { Injectable } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
-import { In, Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/users.entity';
-import { isNil, prop } from 'ramda';
+import { isNil, prop, pluck, forEach, propEq, filter, pipe } from 'ramda';
 import { Messages } from 'src/messages/messages.entity';
 
 @Injectable()
@@ -99,13 +99,15 @@ export class SocketService {
         id: prop('from')(updatedRecord),
       });
 
-      this.server.to(socketId).emit('message-delivered', updatedRecord);
+      this.server
+        .to(socketId)
+        .emit('message-delivered', [prop('id')(updatedRecord)]);
     }
   }
 
   async onMessageRead(from, to) {
     await this.messagesRepository.update(
-      { from: In([from, to]), to: In([from, to]) },
+      { from, to },
       {
         status: 'READ',
       },
@@ -116,5 +118,34 @@ export class SocketService {
     });
 
     this.server.to(socketId).emit('message-read', {});
+  }
+
+  async onMessageDeliveredAll(to) {
+    const sendersMessages = await this.messagesRepository.findBy({
+      to,
+      status: 'SENT',
+    });
+
+    const senders = await this.usersRepository.findBy({
+      id: In(pluck('from')(sendersMessages)),
+    });
+
+    await this.messagesRepository.update(
+      { to, status: 'SENT' },
+      {
+        status: 'DELIVERED',
+      },
+    );
+
+    forEach((user) => {
+      const messagesIds = pipe(
+        filter(propEq(prop('id')(user), 'from')),
+        pluck('id'),
+      )(sendersMessages);
+
+      this.server
+        .to(prop('socketId')(user))
+        .emit('message-delivered', messagesIds);
+    })(senders);
   }
 }
