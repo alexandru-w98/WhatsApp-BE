@@ -9,7 +9,6 @@ export class OtpsController {
   @Get('/otps')
   async findAllCountries(): Promise<Otps[]> {
     const otps = await this.otpsService.findAll();
-    console.log('test', otps);
     return otps;
   }
 
