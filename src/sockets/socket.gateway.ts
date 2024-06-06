@@ -55,4 +55,10 @@ export class SocketGateway {
     const { to } = data;
     await this.socketService.onMessageDeliveredAll(to);
   }
+
+  @SubscribeMessage('message-typing')
+  async handleMessageTyping(socket: Socket, data) {
+    const { from, to } = data;
+    await this.socketService.onMessageTyping(from, to);
+  }
 }

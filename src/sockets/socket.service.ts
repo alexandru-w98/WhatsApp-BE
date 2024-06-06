@@ -148,4 +148,10 @@ export class SocketService {
         .emit('message-delivered', messagesIds);
     })(senders);
   }
+
+  async onMessageTyping(from, to) {
+    const { socketId } = await this.usersRepository.findOneBy({ id: to });
+
+    this.server.to(socketId).emit('message-typing', { from });
+  }
 }
