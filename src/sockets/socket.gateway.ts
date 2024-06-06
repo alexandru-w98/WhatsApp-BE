@@ -31,4 +31,34 @@ export class SocketGateway {
     const { token } = data;
     await this.socketService.onUpdateSocketId(socket, token);
   }
+
+  @SubscribeMessage('message')
+  async handleMessage(socket: Socket, data) {
+    const { content, to, from } = data;
+    await this.socketService.onMessage(socket, content, from, to);
+  }
+
+  @SubscribeMessage('message-delivered')
+  async handleMessageDelivered(socket: Socket, data) {
+    const { id } = data;
+    await this.socketService.onMessageDelivered(id);
+  }
+
+  @SubscribeMessage('message-read')
+  async handleMessageRead(socket: Socket, data) {
+    const { to, from } = data;
+    await this.socketService.onMessageRead(from, to);
+  }
+
+  @SubscribeMessage('message-delivered-all')
+  async handleMessageDeliveredAll(socket: Socket, data) {
+    const { to } = data;
+    await this.socketService.onMessageDeliveredAll(to);
+  }
+
+  @SubscribeMessage('message-typing')
+  async handleMessageTyping(socket: Socket, data) {
+    const { from, to } = data;
+    await this.socketService.onMessageTyping(from, to);
+  }
 }
