@@ -154,4 +154,17 @@ export class SocketService {
 
     this.server.to(socketId).emit('message-typing', { from });
   }
+
+  // VIDEO CALL
+  async onVideoCall(from, to, streamData) {
+    const { socketId } = await this.usersRepository.findOneBy({ id: to });
+
+    this.server.to(socketId).emit('videocall', { from, streamData });
+  }
+
+  async onVideoCallAccepted(from, streamData) {
+    const { socketId } = await this.usersRepository.findOneBy({ id: from });
+
+    this.server.to(socketId).emit('videocall-accepted', { from, streamData });
+  }
 }

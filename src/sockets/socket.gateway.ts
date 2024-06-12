@@ -61,4 +61,17 @@ export class SocketGateway {
     const { from, to } = data;
     await this.socketService.onMessageTyping(from, to);
   }
+
+  // VIDEO CALL
+  @SubscribeMessage('videocall')
+  async handleVideoCall(socket: Socket, data) {
+    const { from, to, streamData } = data;
+    await this.socketService.onVideoCall(from, to, streamData);
+  }
+
+  @SubscribeMessage('videocall-accepted')
+  async handleVideoCallAnswer(socket: Socket, data) {
+    const { from, streamData } = data;
+    await this.socketService.onVideoCallAccepted(from, streamData);
+  }
 }
